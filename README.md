@@ -1,4 +1,4 @@
-# Auto PPT Generator (Render deploy)
+# Auto PPT Generator
 
 A tiny web app that turns bulk text/markdown into a PowerPoint presentation **styled like a user-uploaded PPTX/POTX template**. Users can (optionally) bring an LLM API key to help split the text into a better slide structure. Keys are **not stored or logged**.
 
