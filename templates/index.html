@@ -1,0 +1,60 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Auto PPT Generator</h1>
+    <p>Paste text/markdown, choose an (optional) LLM provider + API key, upload a PowerPoint template, and get a styled deck.</p>
+
+    <form action="/generate" method="post" enctype="multipart/form-data">
+      <label for="text">Text / Markdown</label>
+      <textarea id="text" name="text" rows="12" placeholder="Paste your content here..." required></textarea>
+
+      <label for="guidance">One-line guidance (optional)</label>
+      <input id="guidance" name="guidance" type="text" placeholder="e.g., investor pitch, research summary">
+
+      <div class="grid">
+        <div>
+          <label for="provider">LLM Provider</label>
+          <select id="provider" name="provider">
+            <option value="none" selected>No LLM (rule-based)</option>
+            <option value="openai">OpenAI</option>
+            <option value="anthropic">Anthropic</option>
+            <option value="gemini">Gemini</option>
+          </select>
+        </div>
+        <div>
+          <label for="api_key">LLM API Key (not stored)</label>
+          <input id="api_key" name="api_key" type="password" placeholder="Paste your key if using an LLM">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="template">PowerPoint template (.pptx or .potx)</label>
+          <input id="template" name="template" type="file" accept=".pptx,.potx" required>
+        </div>
+        <div class="checkbox">
+          <input id="gen_notes" name="gen_notes" type="checkbox" value="true">
+          <label for="gen_notes">Generate speaker notes</label>
+        </div>
+      </div>
+
+      <button type="submit">Generate .pptx</button>
+    </form>
+
+    <p class="footnote">
+      Keys are used only for this request and are never logged or stored.
+    </p>
+    <p class="footnote">
+      Tip: Use a template that already contains your brand fonts/colors and a logo in the master.
+    </p>
+  </div>
+</body>
+</html>
