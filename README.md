@@ -1,8 +1,8 @@
 # Auto PPT Generator
 
-A tiny web app that turns bulk text/markdown into a PowerPoint presentation **styled like a user-uploaded PPTX/POTX template**. Users can (optionally) bring an LLM API key to help split the text into a better slide structure. Keys are **not stored or logged**.
+A tiny web app that turns bulk text/markdown into a PowerPoint presentation **styled like a user-uploaded PPTX/POTX template**. Users can (optionally) bring an LLM API key to help split the text into slides and generate speaker notes.
 
-> Built to match your college task brief: accept text + guidance + user-supplied LLM key + PPT template and output a new `.pptx` that follows the template’s look & feel (colors, fonts, images) without generating new images. fileciteturn2file0
+> Built to match your college task brief: accept text + guidance + user-supplied LLM key + PPT template and output a new `.pptx` that follows the template’s look & feel (colors, fonts, images) with slides created from your content.
 
 ---
 
@@ -33,10 +33,27 @@ uvicorn app:app --reload
 6. (If using GitHub Pages as a separate frontend, enable CORS in `app.py`.)
 
 ## Short write-up (≈250 words)
-The app converts long-form text into a slide plan using either an LLM or a deterministic fallback. When an LLM key is provided, the server calls the selected provider (OpenAI/Anthropic/Gemini) with a constrained prompt to return **strict JSON** describing slides: each with a title, bullet list, and optional speaker notes. If no key is supplied, a compact rule-based algorithm splits the text into sections: it tries markdown headings first; if none are present, it segments by blank lines and sentence boundaries, assigns a concise title from the first sentence, and trims to 3–6 bullets per slide. The resulting plan is then rendered via `python-pptx` using the **uploaded file as the template** (`Presentation(template_path)`), ensuring master themes, fonts, colors, and layout placeholders are inherited automatically. Slides are created with a “Title and Content” layout when available, falling back to the first layout otherwise. Bullet paragraphs are inserted directly into the body placeholder, and speaker notes are added to each slide if present. Because generation starts from the user’s template, reusable assets (e.g., logos on the master) naturally appear. The app deliberately avoids any AI image creation and never stores sensitive inputs like API keys. It offers basic validation (file type and size) and returns a downloadable `.pptx`. The design emphasizes clarity over perfection: perfect layout inference isn’t required; the focus is on matching style, sensible slide counts, and a clean, reproducible pipeline from text to deck. fileciteturn2file0
+The app converts long-form text into a slide plan using either an LLM or a deterministic fallback. When an LLM key is provided, the server calls the selected provider (OpenAI/Anthropic/Gemini) with your text and brief guidance. The response is parsed and mapped into slides, then styled using the uploaded template. If no key is given, a rule-based parser splits the input into slides using Markdown headers, delimiters, and bullet points.
+
+---
+# Slide Parsing and Template Application
+
+## Parsing Input Text and Mapping to Slides
+
+The app begins by accepting a structured input text, typically formatted with headings, bullet points, or explicit slide delimiters. The parsing engine scans the input, identifying key sections such as titles, subtitles, and content blocks by detecting patterns—like Markdown headers (`#`, `##`), line breaks, or special markers (e.g., `---` for slide separation). Each detected section is mapped to a slide: headings become slide titles, while subsequent lines or bullet points are assigned as body text or list items. If images or media links are present, the parser recognizes them using standard syntax (like `![Image](url)` in Markdown) and tags these for media placement. The parser ensures that each slide object contains all relevant content types: title, body, images, and additional metadata, preserving order and hierarchy from the original text.
+
+## Applying Template Visual Style and Assets
+
+Once slides are generated, the app applies the selected template’s visual style and assets to each slide. Templates define consistent elements such as fonts, color schemes, background graphics, and default layouts for text and images. During rendering, the app assigns fonts and colors according to template specifications, ensuring uniformity across all slides. Images and media are positioned in pre-defined areas, and transitions or animations are added as dictated by the template. Logo, watermark, and any decorative assets specified in the template are included automatically. This process ensures that every slide adheres to the chosen style, resulting in a cohesive, visually-appealing presentation that matches the template’s branding and aesthetic.
+
+---
 
 ## Notes / Limits
 - Template limit defaults to 15 MB; adjust in `app.py` if needed.
 - If your provider/model is slow or blocked, use the **No LLM** fallback.
 - We do **not** generate images with AI.
 - API keys are not stored or printed in logs.
+
+## License
+
+This repository is for educational purposes.
