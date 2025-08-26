@@ -1,0 +1,9 @@
+# Slide Parsing and Template Application
+
+## Parsing Input Text and Mapping to Slides
+
+The app begins by accepting a structured input text, typically formatted with headings, bullet points, or explicit slide delimiters. The parsing engine scans the input, identifying key sections such as titles, subtitles, and content blocks by detecting patterns—like Markdown headers (`#`, `##`), line breaks, or special markers (e.g., `---` for slide separation). Each detected section is mapped to a slide: headings become slide titles, while subsequent lines or bullet points are assigned as body text or list items. If images or media links are present, the parser recognizes them using standard syntax (like `![Image](url)` in Markdown) and tags these for media placement. The parser ensures that each slide object contains all relevant content types: title, body, images, and additional metadata, preserving order and hierarchy from the original text.
+
+## Applying Template Visual Style and Assets
+
+Once slides are generated, the app applies the selected template’s visual style and assets to each slide. Templates define consistent elements such as fonts, color schemes, background graphics, and default layouts for text and images. During rendering, the app assigns fonts and colors according to template specifications, ensuring uniformity across all slides. Images and media are positioned in pre-defined areas, and transitions or animations are added as dictated by the template. Logo, watermark, and any decorative assets specified in the template are included automatically. This process ensures that every slide adheres to the chosen style, resulting in a cohesive, visually-appealing presentation that matches the template’s branding and aesthetic.
